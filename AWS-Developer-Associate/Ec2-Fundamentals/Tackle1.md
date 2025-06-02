@@ -1,8 +1,6 @@
 # Session 1: EC2 Instance Deployment & Security Groups
 
-> **Demo Video:** 
-
-[Watch the walkthrough here!](https://youtu.be/EBY5z_ji9GE)
+[![Watch the demo video](https://img.youtube.com/vi/EBY5z_ji9GE/0.jpg)](https://www.youtube.com/watch?v=EBY5z_ji9GE)
 
 ## Topic & Key Concepts
 - **Topic:** Deploying an EC2 Instance & Security Group Concepts
