@@ -1,5 +1,9 @@
 # Session 1: EC2 Instance Deployment & Security Groups
 
+> **Demo Video:** 
+
+[Watch the walkthrough here!](https://youtu.be/EBY5z_ji9GE)
+
 ## Topic & Key Concepts
 - **Topic:** Deploying an EC2 Instance & Security Group Concepts
 - **Key Concepts:**
@@ -61,6 +65,3 @@
 ## Lessons Learned
 - Security groups are stateful and easy to configure for least-privilege access.
 - Always restrict SSH to known IPs and never expose private keys.
-
-
----
