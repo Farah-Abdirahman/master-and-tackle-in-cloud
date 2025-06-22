@@ -330,12 +330,12 @@ DB_PASSWORD=your-secure-password
    mysql -h <your-rds-endpoint> -u admin -p
 
 
+   # Create Directory and the editor
+   mkdir flask-crud
+   cd flask-crud
+   nano app.py
 
-
-
-   # Clone your application
-   git clone https://github.com/your-repo/flask-crud-app.git
-   cd flask-crud-app
+   # Paste the code in the editor
    
    # Install dependencies
    pip3 install -r requirements.txt
