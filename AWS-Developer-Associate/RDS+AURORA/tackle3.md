@@ -224,9 +224,9 @@ app = Flask(__name__)
 
 # Replace with your real RDS credentials
 db = pymysql.connect(
-    host='your-rds-endpoint',
+    host='techgadget.ccfig4ammrcv.us-east-1.rds.amazonaws.com',
     user='admin',
-    password='your-password',
+    password='farah1234',
     database='appdb',
     port=3306
 )
@@ -323,6 +323,16 @@ DB_PASSWORD=your-secure-password
    # Install Python 3.8 and pip
    sudo yum install python3 python3-pip git -y
    
+   # Run this to install Mysql mariadb
+   sudo yum install mariadb -y
+   
+   # Connect to your RDS MySQL instance
+   mysql -h <your-rds-endpoint> -u admin -p
+
+
+
+
+
    # Clone your application
    git clone https://github.com/your-repo/flask-crud-app.git
    cd flask-crud-app
