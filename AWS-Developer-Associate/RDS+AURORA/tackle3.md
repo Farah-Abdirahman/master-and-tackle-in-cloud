@@ -215,66 +215,6 @@ PyMySQL==1.1.0
 # DB_NAME=appdb
 ```
 
-**app.py**
-```python
-from flask import Flask, request, jsonify
-import pymysql
-
-app = Flask(__name__)
-
-# Replace with your real RDS credentials
-db = pymysql.connect(
-    host='techgadget.ccfig4ammrcv.us-east-1.rds.amazonaws.com',
-    user='admin',
-    password='farah1234',
-    database='appdb',
-    port=3306
-)
-
-@app.route('/create', methods=['POST'])
-def create_customer():
-    data = request.json
-    cursor = db.cursor()
-    cursor.execute("INSERT INTO customers (name, email) VALUES (%s, %s)", (data['name'], data['email']))
-    db.commit()
-    return jsonify({"message": "Customer created"}), 201
-
-@app.route('/read/<int:cid>', methods=['GET'])
-def get_customer(cid):
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM customers WHERE id=%s", (cid,))
-    row = cursor.fetchone()
-    return jsonify({"customer": row}) if row else ("Not found", 404)
-
-@app.route('/update/<int:cid>', methods=['PUT'])
-def update_customer(cid):
-    data = request.json
-    cursor = db.cursor()
-    cursor.execute("UPDATE customers SET email=%s WHERE id=%s", (data['email'], cid))
-    db.commit()
-    return jsonify({"message": "Customer updated"})
-
-@app.route('/delete/<int:cid>', methods=['DELETE'])
-def delete_customer(cid):
-    cursor = db.cursor()
-    cursor.execute("DELETE FROM customers WHERE id=%s", (cid,))
-    db.commit()
-    return jsonify({"message": "Customer deleted"})
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
-```
-
-**.env (Environment Configuration)**
-```env
-# RDS MySQL Configuration (if you want to use environment variables)
-DB_HOST=your-rds-endpoint.amazonaws.com
-DB_PORT=3306
-DB_NAME=appdb
-DB_USER=admin
-DB_PASSWORD=your-secure-password
-```
-```python
 ### Step 3: AWS Deployment
 
 #### Setting up RDS MySQL
@@ -322,6 +262,9 @@ DB_PASSWORD=your-secure-password
    
    # Install Python 3.8 and pip
    sudo yum install python3 python3-pip git -y
+
+   # Install Requirements
+   sudo python3 install flask, pymysql
    
    # Run this to install Mysql mariadb
    sudo yum install mariadb -y
@@ -337,16 +280,63 @@ DB_PASSWORD=your-secure-password
 
    # Paste the code in the editor
    
-   # Install dependencies
-   pip3 install -r requirements.txt
-     # Set environment variables (optional - you can edit directly in code)
-   export DB_HOST=your-rds-endpoint.amazonaws.com
-   export DB_NAME=appdb
-   export DB_USER=admin
-   export DB_PASSWORD=YourSecurePassword123!
-   
-   # Run the application
-   python3 app.py
+**app.py**
+```python
+from flask import Flask, request, jsonify
+import pymysql
+
+app = Flask(__name__)
+
+mysql -h techgadgetdb.ccfig4ammrcv.us-east-1.rds.amazonaws.com -u admin -p
+
+
+# Replace with your real RDS credentials
+db = pymysql.connect(
+    host='your-rds-endpoint',
+    user='admin',
+    password='your-password',
+    database='appdb',
+    port=3306
+)
+
+
+@app.route('/create', methods=['POST'])
+def create_customer():
+    data = request.json
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO customers (name, email) VALUES (%s, %s)", (data['name'], data['email']))
+    db.commit()
+    return jsonify({"message": "Customer created"}), 201
+
+@app.route('/read/<int:cid>', methods=['GET'])
+def get_customer(cid):
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM customers WHERE id=%s", (cid,))
+    row = cursor.fetchone()
+    return jsonify({"customer": row}) if row else ("Not found", 404)
+
+@app.route('/update/<int:cid>', methods=['PUT'])
+def update_customer(cid):
+    data = request.json
+    cursor = db.cursor()
+    cursor.execute("UPDATE customers SET email=%s WHERE id=%s", (data['email'], cid))
+    db.commit()
+    return jsonify({"message": "Customer updated"})
+
+@app.route('/delete/<int:cid>', methods=['DELETE'])
+def delete_customer(cid):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM customers WHERE id=%s", (cid,))
+    db.commit()
+    return jsonify({"message": "Customer deleted"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
+```
+
+# Run the application
+```
+   sudo python3 app.py
    ```
 
 ### Step 4: Testing the API
