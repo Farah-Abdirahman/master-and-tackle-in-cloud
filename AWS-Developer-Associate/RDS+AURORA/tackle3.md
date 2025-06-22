@@ -18,7 +18,7 @@ This is a simple Python Flask REST API that performs CRUD operations on a MySQL 
 - **Amazon RDS** (MySQL)
 
 ## Topic Overview
-**Key Concepts Learned (Pages 144-166):**
+**Key Concepts Learned:**
 - **AWS RDS** (Relational Database Service) - Multi-AZ, Read Replicas, Backup & Recovery
 - **Amazon Aurora** - Cloud-native database, Aurora Serverless, Global Database
 - **Database Performance** - Connection pooling, Query optimization, Indexing strategies
@@ -55,6 +55,63 @@ Implement caching to dramatically improve application performance:
 - **Cache-Aside Pattern:** Application manages cache, checks cache first, then database if cache miss
 - **Write-Through/Write-Behind:** Different patterns for updating cache when data changes
 - **TTL Management:** Set appropriate Time-To-Live values to balance data freshness with performance
+
+##### **Detailed Caching Patterns:**
+
+**1. Cache-Aside (Lazy Loading) Pattern:**
+```python
+# Most common pattern - application manages cache
+def get_customer(customer_id):
+    # 1. Check cache first
+    cache_key = f"customer:{customer_id}"
+    cached_data = cache.get(cache_key)
+    
+    if cached_data:
+        return cached_data  # Cache hit
+    
+    # 2. Cache miss - get from database
+    customer = database.get_customer(customer_id)
+    
+    # 3. Store in cache for next time
+    cache.set(cache_key, customer, ttl=3600)  # 1 hour TTL
+    return customer
+```
+**Pros:** Only cache data that's actually requested, simple to implement
+**Cons:** Cache miss penalty, potential stale data
+
+**2. Write-Through Pattern:**
+```python
+# Write to cache and database simultaneously
+def update_customer(customer_id, data):
+    # 1. Update database first
+    database.update_customer(customer_id, data)
+    
+    # 2. Update cache immediately
+    cache_key = f"customer:{customer_id}"
+    cache.set(cache_key, data, ttl=3600)
+    
+    return data
+```
+**Pros:** Cache is always consistent with database
+**Cons:** Write latency, cache may contain unused data
+
+
+##### **Redis vs Memcached Comparison:**
+
+**Use Redis when you need:**
+- Complex data structures (hashes, lists, sets, sorted sets)
+- Persistence and data durability
+- Pub/Sub messaging
+- Lua scripting
+- Atomic operations
+- Master-slave replication
+
+**Use Memcached when you need:**
+- Simple key-value caching
+- Multi-threaded performance
+- Lower memory overhead
+- Simple horizontal scaling
+
 
 #### **5. Database Security Best Practices**
 Comprehensive security measures for database protection:
